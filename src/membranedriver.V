@@ -36,9 +36,6 @@ always @(posedge clk or posedge rst) begin
     end else begin
         case (step)
         4'd0: begin
-        out0 <= 1'b0;
-        out1 <= 1'b0;
-        out2 <= 1'b0;
         data_out <= 4'd13;
         recenthit <= 4'd13;
         cyclehits <= 4'd0;
