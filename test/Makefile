@@ -6,7 +6,7 @@ SIM ?= icarus
 FST ?= -fst # Use more efficient FST format
 TOPLEVEL_LANG ?= verilog
 SRC_DIR = $(PWD)/../src
-PROJECT_SOURCES = IHPfinal.v clockboss.V membranedriver.V safecontrol.V
+PROJECT_SOURCES = IHPfinal.v clockboss.v membranedriver.v safecontrol.v
 
 ifneq ($(GATES),yes)
 
