@@ -34,6 +34,11 @@ always @(posedge clk) begin
         cyclehits <= 4'd0;
         prior <= 4'd13;
     end else begin
+        // Default: maintain current values (synthesis-friendly pattern)
+        out0 <= out0;
+        out1 <= out1;
+        out2 <= out2;
+        
         case (step)
         4'd0: begin
         data_out <= 4'd13;
