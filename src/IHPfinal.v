@@ -5,7 +5,7 @@
 
 `default_nettype none
 
-module tt_um_entropicentity_Safe_ASIC (
+module tt_um_example (
     input  wire [7:0] ui_in,    // Dedicated inputs
     output wire [7:0] uo_out,   // Dedicated outputs
     input  wire [7:0] uio_in,   // IOs: Input path
@@ -33,9 +33,7 @@ module tt_um_entropicentity_Safe_ASIC (
     wire [3:0] dataline;
 
     wire [3:0] numins;
-    wire [2:0] numouts;
 
-    assign uio_out[2:0] = numouts;
     assign uio_out[3] = lock;
     assign uio_out[4] = green;
     assign uio_out[5] = blue;
@@ -55,9 +53,9 @@ module tt_um_entropicentity_Safe_ASIC (
     .in1(uio_in[1]),
     .in2(uio_in[2]),
     .in3(uio_in[3]),
-    .out0(numouts[0]),
-    .out1(numouts[1]),
-    .out2(numouts[2]),
+    .out0(uio_out[0]),
+    .out1(uio_out[1]),
+    .out2(uio_out[2]),
     .data_out(dataline)
   );
 
