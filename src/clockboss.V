@@ -1,21 +1,35 @@
 module clockboss(
     input wire clk,
     input wire rst,
-    output wire c1,
-    output wire c2
+    output reg c1,
+    output reg c2
     );
 
     reg toggle;
-
-    assign c1 = toggle | rst;
-    assign c2 = ~toggle | rst;
-
-    always @(posedge rst) begin
-        toggle <= 1'b0;
-    end
+    reg rst_prev;
 
     always @(posedge clk) begin
-        toggle <= ~toggle;
+        rst_prev <= rst;
+        
+        if (rst) begin
+            // On first reset cycle: drive both low
+            // On subsequent reset cycles: drive both high (creating positive edge)
+            if (!rst_prev) begin
+                // Rising edge of reset - drive both low
+                c1 <= 1'b0;
+                c2 <= 1'b0;
+            end else begin
+                // Reset held high - drive both high (creates 0→1 edge)
+                c1 <= 1'b1;
+                c2 <= 1'b1;
+            end
+            toggle <= 1'b0;
+        end else begin
+            // Normal operation: alternating clocks
+            toggle <= ~toggle;
+            c1 <= toggle;
+            c2 <= ~toggle;
+        end
     end
 
 endmodule

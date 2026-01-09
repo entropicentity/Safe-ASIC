@@ -46,29 +46,31 @@ module safecontrol(
     reg [3:0] d12;
     reg [3:0] d13;
 
-    always @(posedge rst) begin
+    
         //reset all values
-        lock <= 1'b0;
-        green <= 1;
-        blue <= 0;  
-
-        xcord <= 3'd0;
-        ycord <= 1'b0;
-
-        state <= 3'b000;
-
-        d00 <= 4'd0;
-        d01 <= 4'd0;
-        d02 <= 4'd0;
-        d03 <= 4'd0;
-        d10 <= 4'd0;
-        d11 <= 4'd0;
-        d12 <= 4'd0;
-        d13 <= 4'd0;
-    end
+  
+    
 
     always @(posedge clk) begin
-            if (invalue != 4'd13) begin
+            if (rst) begin
+                lock <= 1'b0;
+                green <= 1;
+                blue <= 0;  
+
+                xcord <= 3'd0;
+                ycord <= 1'b0;
+
+                state <= 3'b000;
+
+                d00 <= 4'd0;
+                d01 <= 4'd0;
+                d02 <= 4'd0;
+                d03 <= 4'd0;
+                d10 <= 4'd0;
+                d11 <= 4'd0;
+                d12 <= 4'd0;
+                d13 <= 4'd0;
+            end else if (invalue != 4'd13) begin
                 // process key press
                 if (state == 3'b000) begin
                     //the open state
@@ -82,7 +84,7 @@ module safecontrol(
                                 ycord <= 1'b1;
                                 xcord <= 3'd0;
                             end
-                        end else begin //handles all other cases, or all digit cases
+                        end else if (xcord != 3'd4) begin //handles all other cases, or all digit cases (ignore if already have 4 digits)
                             if (xcord == 3'd0) begin
                                 d00 <= invalue;
                                 xcord <= xcord + 3'd1;
@@ -118,7 +120,8 @@ module safecontrol(
                                 end
 
                             end
-                        end else begin //handles all other cases, or all digit cases
+                            // If xcord < 4, repeated # does nothing (stay in same state)
+                        end else if (xcord != 3'd4) begin //handles all other cases, or all digit cases (ignore if already have 4 digits)
                             if (xcord == 3'd0) begin
                                 d10 <= invalue;
                                 xcord <= xcord + 3'd1;
@@ -138,7 +141,9 @@ module safecontrol(
                     
                 end else if (state == 3'b001) begin
                     //the normal operation state
-                    if (invalue == 4'd10) begin //hashtag or confirm codes match case
+                    if (invalue == 4'd11) begin //handles the clear button case or star case
+                        xcord <= 3'd0;
+                    end else if (invalue == 4'd10) begin //hashtag or confirm codes match case
                             if (xcord == 3'd4) begin 
                                 //compare codes
                                 if ( (d00 == d10) && (d01 == d11) && (d02 == d12) && (d03 == d13) ) begin
@@ -157,7 +162,8 @@ module safecontrol(
                                 end
 
                             end
-                        end else begin //handles all other cases, or all digit cases
+                            // If xcord < 4, repeated # does nothing (stay in same state)
+                        end else if (xcord != 3'd4) begin //handles all other cases, or all digit cases (ignore if already have 4 digits)
                             if (xcord == 3'd0) begin
                                 d10 <= invalue;
                                 xcord <= xcord + 3'd1;
