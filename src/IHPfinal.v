@@ -15,30 +15,26 @@ module tt_um_entropicentity_Safe_ASIC (
     input  wire       clk,      // clock
     input  wire       rst_n     // reset_n - low to reset
 );
+
   // All output pins must be assigned. If not used, assign to 0.
-  assign uo_out  = 0;  // Example: ou_out is the sum of ui_in and uio_in
-  assign uio_out = 0;
-  assign uio_oe  = 0;
+  assign uo_out  = 0;
+  assign uio_oe  = 8'b00111111; // uio[5:0] are outputs, uio[7:6] are inputs
+
+  // Internal wires
+  wire c1, c2;              // Alternating clocks from clockboss
+  wire lock, green, blue;   // Safe control outputs
+  wire [3:0] dataline;      // Data from membranedriver to safecontrol
+
+  // Assign outputs
+  assign uio_out[3] = lock;
+  assign uio_out[4] = green;
+  assign uio_out[5] = blue;
+  assign uio_out[7:6] = 2'b00;
 
   // List all unused inputs to prevent warnings
-  wire _unused = &{uio_in[7:4], ena, clk, rst_n, 1'b0};
+  wire _unused = &{ui_in, ena, 1'b0};
 
-    wire c1;
-    wire c2;
-
-    wire green;
-    wire blue;
-    wire lock;
-
-    wire [3:0] dataline;
-
-    wire [3:0] numins;
-
-    assign uio_out[3] = lock;
-    assign uio_out[4] = green;
-    assign uio_out[5] = blue;
-    assign uio_out[7:6] = 2'b00;
-
+  // Clock divider - generates alternating clocks
   clockboss u_clockboss (
     .clk(clk),
     .rst(~rst_n),
@@ -46,6 +42,7 @@ module tt_um_entropicentity_Safe_ASIC (
     .c2(c2)
   );
 
+  // Keypad scanner - scans matrix keypad and outputs digit codes
   membranedriver u_membranedriver (
     .clk(c1),
     .rst(~rst_n),
@@ -59,6 +56,7 @@ module tt_um_entropicentity_Safe_ASIC (
     .data_out(dataline)
   );
 
+  // Safe controller - manages unlock codes and LED status
   safecontrol u_safecontrol (
     .clk(c2),
     .rst(~rst_n),
@@ -67,7 +65,5 @@ module tt_um_entropicentity_Safe_ASIC (
     .green(green),
     .blue(blue)
   );
-
-
 
 endmodule
