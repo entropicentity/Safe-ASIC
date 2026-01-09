@@ -23,20 +23,18 @@ reg [3:0] step;
 reg [3:0] cyclehits;
 reg [3:0] prior;
 
-always @(posedge rst) begin
-    out0 <= 1'b0;
-    out1 <= 1'b0;
-    out2 <= 1'b0;
-    data_out <= 4'd13;
-    step <= 4'd0;
-    recenthit <= 4'd13;
-    cyclehits <= 4'd0;
-    prior <= 4'd13;
-
-end
-
-always @(posedge clk) begin
-    case (step)
+always @(posedge clk or posedge rst) begin
+    if (rst) begin
+        out0 <= 1'b0;
+        out1 <= 1'b0;
+        out2 <= 1'b0;
+        data_out <= 4'd13;
+        step <= 4'd0;
+        recenthit <= 4'd13;
+        cyclehits <= 4'd0;
+        prior <= 4'd13;
+    end else begin
+        case (step)
         4'd0: begin
         out0 <= 1'b0;
         out1 <= 1'b0;
@@ -145,8 +143,9 @@ always @(posedge clk) begin
             step <= 4'd15; // skip to end to reset
         end
        
-    endcase
-    step <= step + 1; // wrap-around after max step
+        endcase
+        step <= step + 1; // wrap-around after max step
+    end
 end
 
 
