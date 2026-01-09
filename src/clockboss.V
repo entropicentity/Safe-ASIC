@@ -7,8 +7,8 @@ module clockboss(
 
     reg toggle;
 
-    assign c1 = toggle;
-    assign c2 = ~toggle;
+    assign c1 = toggle | rst;
+    assign c2 = ~toggle | rst;
 
     always @(posedge rst) begin
         toggle <= 1'b0;

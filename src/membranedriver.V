@@ -23,7 +23,7 @@ reg [3:0] step;
 reg [3:0] cyclehits;
 reg [3:0] prior;
 
-always @(posedge clk or posedge rst) begin
+always @(posedge clk) begin
     if (rst) begin
         out0 <= 1'b0;
         out1 <= 1'b0;
@@ -139,9 +139,18 @@ always @(posedge clk or posedge rst) begin
             data_out <= 4'd13; // clear output after one cycle
             step <= 4'd15; // skip to end to reset
         end
+        
+        default: begin
+            // Ensure outputs hold their values in unspecified steps
+        end
        
         endcase
-        step <= step + 1; // wrap-around after max step
+        
+        // Explicit step counter with wrap
+        if (step >= 4'd15)
+            step <= 4'd0;
+        else
+            step <= step + 1;
     end
 end
 
