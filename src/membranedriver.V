@@ -5,9 +5,9 @@ module membranedriver(
     input wire in1,
     input wire in2,
     input wire in3,
-    output reg out0,
-    output reg out1,
-    output reg out2,
+    output wire out0,
+    output wire out1,
+    output wire out2,
     output reg [3:0] data_out
      /* key
     0-9 digits
@@ -23,22 +23,19 @@ reg [3:0] step;
 reg [3:0] cyclehits;
 reg [3:0] prior;
 
+// Combinational logic for row outputs
+assign out0 = (step == 4'd1 || step == 4'd2);
+assign out1 = (step == 4'd4 || step == 4'd5);
+assign out2 = (step == 4'd7 || step == 4'd8);
+
 always @(posedge clk) begin
     if (rst) begin
-        out0 <= 1'b0;
-        out1 <= 1'b0;
-        out2 <= 1'b0;
         data_out <= 4'd13;
         step <= 4'd0;
         recenthit <= 4'd13;
         cyclehits <= 4'd0;
         prior <= 4'd13;
     end else begin
-        // Default: maintain current values (synthesis-friendly pattern)
-        out0 <= out0;
-        out1 <= out1;
-        out2 <= out2;
-        
         case (step)
         4'd0: begin
         data_out <= 4'd13;
@@ -47,7 +44,7 @@ always @(posedge clk) begin
         end
 
         4'd1: begin
-            out0 <= 1;
+            // out0 driven by assign
         end
         4'd2: begin
             if (in0) begin
@@ -68,13 +65,13 @@ always @(posedge clk) begin
             end
         end
         4'd3: begin
-            out0 <= 0;
+            // out0 driven by assign
         end
 
 
 
         4'd4: begin
-            out1 <= 1;
+            // out1 driven by assign
         end
         4'd5: begin
             if (in0) begin
@@ -95,13 +92,13 @@ always @(posedge clk) begin
             end
         end
         4'd6: begin
-            out1 <= 0;
+            // out1 driven by assign
         end
 
 
 
         4'd7: begin
-            out2 <= 1;
+            // out2 driven by assign
         end
         4'd8: begin
             if (in0) begin
@@ -122,7 +119,7 @@ always @(posedge clk) begin
             end
         end
         4'd9: begin
-            out2 <= 0;
+            // out2 driven by assign
         end
 
         4'd10: begin
