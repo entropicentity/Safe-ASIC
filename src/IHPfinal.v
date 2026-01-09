@@ -1,7 +1,9 @@
 /*
- * Copyright (c) 2024 Alexander Singer
+ * Copyright (c) 2024 Alexander Singer, 
  * SPDX-License-Identifier: Apache-2.0
  */
+
+// contact me on discord @entropicentity
 
 `default_nettype none
 
