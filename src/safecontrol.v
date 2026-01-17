@@ -51,8 +51,8 @@ module safecontrol(
   
     
 
-    always @(posedge clk or posedge rst) begin
-            if (rst) begin
+    always @(posedge clk or negedge rst) begin
+        if (~rst) begin
                 lock <= 1'b0;
                 green <= 1;
                 blue <= 0;  
