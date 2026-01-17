@@ -28,8 +28,8 @@ assign out0 = (step == 4'd1 || step == 4'd2);
 assign out1 = (step == 4'd4 || step == 4'd5);
 assign out2 = (step == 4'd7 || step == 4'd8);
 
-    always @(posedge clk or posedge rst) begin
-    if (rst) begin
+    always @(posedge clk or negedge rst) begin
+        if (~rst) begin
         data_out <= 4'd13;
         step <= 4'd0;
         recenthit <= 4'd13;
@@ -166,4 +166,5 @@ endmodule
 
 // Example testbench demonstrating a synchronous `case` on a 4-bit `step`
 // Compatible with Icarus Verilog. Append or adapt actions as needed.
+
 
