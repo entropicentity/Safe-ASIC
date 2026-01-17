@@ -39,7 +39,7 @@ module tt_um_entropicentity_Safe_ASIC (
   // Clock divider - generates alternating clocks
   clockboss u_clockboss (
     .clk(clk),
-    .rst(~rst_n),
+    .rst(rst_n),
     .c1(c1),
     .c2(c2)
   );
@@ -47,7 +47,7 @@ module tt_um_entropicentity_Safe_ASIC (
   // Keypad scanner - scans matrix keypad and outputs digit codes
   membranedriver u_membranedriver (
     .clk(c1),
-    .rst(~rst_n),
+    .rst(rst_n),
     .in0(uio_in[0]),
     .in1(uio_in[1]),
     .in2(uio_in[2]),
@@ -61,7 +61,7 @@ module tt_um_entropicentity_Safe_ASIC (
   // Safe controller - manages unlock codes and LED status
   safecontrol u_safecontrol (
     .clk(c2),
-    .rst(~rst_n),
+    .rst(rst_n),
     .invalue(dataline),
     .lock(lock),
     .green(green),
