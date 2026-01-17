@@ -51,7 +51,7 @@ module safecontrol(
   
     
 
-    always @(posedge clk) begin
+    always @(posedge clk or posedge rst) begin
             if (rst) begin
                 lock <= 1'b0;
                 green <= 1;
@@ -185,3 +185,4 @@ module safecontrol(
             
         end
 endmodule
+
