@@ -7,7 +7,7 @@ module clockboss(
 
     reg toggle;
     always @(posedge clk or negedge rst) begin
-        if (rst) begin
+        if (~rst) begin
             toggle <= 1'b0;
         end else begin
             toggle <= ~toggle;
@@ -19,4 +19,5 @@ module clockboss(
     end
 
 endmodule
+
 
