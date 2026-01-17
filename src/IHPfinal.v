@@ -23,7 +23,7 @@ module tt_um_entropicentity_Safe_ASIC (
   assign uo_out[1] = green;
   assign uo_out[2] = blue;
   assign uo_out[7:3] = 5'b00000;
-  assign uio_oe  = 8'b00000111; // uio[2:0] are outputs (keypad columns), uio[7:4] are inputs (keypad rows), uio[3] unused
+  assign uio_oe  = 8'b00000111; // uio[2:0] are outputs (keypad columns), uio[7:3] configured as inputs (uio[7:4] used for keypad rows, uio[3] unused)
 
   // Internal wires
   wire c1, c2;              // Alternating clocks from clockboss
@@ -35,7 +35,7 @@ module tt_um_entropicentity_Safe_ASIC (
   assign uio_out[0] = keypad_col0;
   assign uio_out[1] = keypad_col1;
   assign uio_out[2] = keypad_col2;
-  assign uio_out[7:3] = 5'b00000;  // Configured as inputs via uio_oe, output values unused
+  assign uio_out[7:3] = 5'b00000;  // uio[7:4] used as inputs (keypad rows), uio[3] unused; output values don't matter when configured as inputs
 
   // List all unused inputs to prevent warnings
   wire _unused = &{ui_in, ena, 1'b0};
